@@ -1,5 +1,4 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const apiSlice = createApi({
   reducerPath: "api",
@@ -7,7 +6,7 @@ const apiSlice = createApi({
     baseUrl: "http://localhost:9000",
   }),
   tagTypes: [],
-  endPoints: (builder) => ({}),
+  endpoints: (builder) => ({}),
 });
 
 export default apiSlice;

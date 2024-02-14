@@ -1,4 +1,5 @@
 import Navbar from "@/component/Navbar";
+import ReduxProvider from "@/provider/ReduxProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,10 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} text-[#111827]`}>
-        <Navbar />
-        {children}
-      </body>
+      <ReduxProvider>
+        <body className={`${inter.className} text-[#111827]`}>
+          <Navbar />
+          {children}
+        </body>
+      </ReduxProvider>
     </html>
   );
 }

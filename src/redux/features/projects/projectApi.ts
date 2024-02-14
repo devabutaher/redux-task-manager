@@ -1,5 +1,11 @@
 import apiSlice from "@/redux/api/apiSlice";
 
 export const projectApi = apiSlice.injectEndpoints({
-  endpoints(build) {},
+  endpoints: (builder) => ({
+    getProjects: builder.query({
+      query: () => "/projects",
+    }),
+  }),
 });
+
+export const { useGetProjectsQuery } = projectApi;

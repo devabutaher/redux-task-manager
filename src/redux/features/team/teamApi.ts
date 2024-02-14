@@ -1,5 +1,11 @@
 import apiSlice from "@/redux/api/apiSlice";
 
 export const teamApi = apiSlice.injectEndpoints({
-  endpoints(build) {},
+  endpoints: (builder) => ({
+    getTeams: builder.query({
+      query: () => "/team",
+    }),
+  }),
 });
+
+export const { useGetTeamsQuery } = teamApi;

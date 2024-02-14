@@ -1,5 +1,3 @@
-import ferdous from "@/assets/avatars/ferdous.png";
-import salah from "@/assets/avatars/salahuddin.png";
 import Image from "next/image";
 
 const Task = () => {
@@ -18,7 +16,13 @@ const Task = () => {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Image src={ferdous} alt="avatar" className="team-avater" />
+            <Image
+              src={"/images/avatars/akash.png"}
+              alt="avatar"
+              className="team-avater"
+              width={200}
+              height={200}
+            />
             <p className="lws-task-assignedOn">Ferdous Hassan</p>
           </div>
           {/* <!-- delete button will not shown to the ui, until the status of the task will be completed --> */}
@@ -76,7 +80,13 @@ const Task = () => {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Image src={salah} alt="avatar" className="team-avater" />
+            <Image
+              src={"/images/avatars/akash.png"}
+              alt="avatar"
+              className="team-avater"
+              width={200}
+              height={200}
+            />
             <p className="lws-task-assignedOn">Md Salahuddin</p>
           </div>
           <button className="lws-delete">

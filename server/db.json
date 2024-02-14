@@ -145,6 +145,22 @@
       },
       "id": 5,
       "status": "completed"
+    },
+    {
+      "taskName": "Rtk Query",
+      "teamMember": {
+        "name": "Akash Ahmed",
+        "avatar": "/images/avatars/akash.png",
+        "id": 3
+      },
+      "project": {
+        "id": 3,
+        "projectName": "Product Cart",
+        "colorClass": "color-productCart"
+      },
+      "deadline": "2024-01-31",
+      "id": 7,
+      "status": "pending"
     }
   ]
 }

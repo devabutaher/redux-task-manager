@@ -1,4 +1,3 @@
-import logo from "@/assets/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +6,7 @@ const Navbar = () => {
     <nav className="container relative py-3">
       <div className="flex items-center justify-between">
         <Link href="/">
-          <Image src={logo} alt="logo" />
+          <Image src="/images/logo.svg" alt="logo" width={200} height={200} />
         </Link>
         <div className="flex-1 max-w-xs search-field group">
           <svg

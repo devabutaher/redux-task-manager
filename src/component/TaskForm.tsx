@@ -1,33 +1,53 @@
 "use client";
+import { useGetProjectsQuery } from "@/redux/features/projects/projectApi";
+import { useCreateTaskMutation } from "@/redux/features/tasks/taskApi";
+import { useGetTeamsQuery } from "@/redux/features/team/teamApi";
+import { useEffect, useState } from "react";
 
-import { useState } from "react";
+const TaskForm = ({ initialData }) => {
+  const { data: projects } = useGetProjectsQuery();
+  const { data: teams } = useGetTeamsQuery();
+  const [createTask, { isLoading, isSuccess }] = useCreateTaskMutation();
 
-const TaskForm = () => {
   const [formData, setFormData] = useState({
     taskName: "",
-    teamMember: "",
-    projectName: "",
+    teamMember: { name: "", avatar: "", id: "" },
+    project: { projectName: "", colorClass: "", id: "" },
     deadline: "",
+    status: "pending",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "teamMember" || name === "project") {
+      const parsedValue = JSON.parse(value);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: parsedValue,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can perform any action with formData, such as sending it to an API
-    console.log(formData);
+    createTask(formData);
 
     // Reset the form after submission
     setFormData({
       taskName: "",
-      teamMember: "",
-      projectName: "",
+      teamMember: {},
+      project: {},
       deadline: "",
     });
   };
@@ -53,39 +73,36 @@ const TaskForm = () => {
           name="teamMember"
           id="lws-teamMember"
           required
-          value={formData.teamMember}
+          value={JSON.stringify(formData.teamMember)}
           onChange={handleChange}
         >
           <option value="" hidden>
             Select Job
           </option>
-          <option>Sumit Saha</option>
-          <option>Sadh Hasan</option>
-          <option>Akash Ahmed</option>
-          <option>Md Salahuddin</option>
-          <option>Riyadh Hassan</option>
-          <option>Ferdous Hassan</option>
-          <option>Arif Almas</option>
+          {teams?.map((team) => (
+            <option key={team.id} value={JSON.stringify(team)}>
+              {team.name}
+            </option>
+          ))}
         </select>
       </div>
       <div className="fieldContainer">
         <label htmlFor="lws-projectName">Project Name</label>
         <select
           id="lws-projectName"
-          name="projectName"
+          name="project"
           required
-          value={formData.projectName}
+          value={JSON.stringify(formData.project)}
           onChange={handleChange}
         >
           <option value="" hidden>
             Select Project
           </option>
-          <option>Scoreboard</option>
-          <option>Flight Booking</option>
-          <option>Product Cart</option>
-          <option>Book Store</option>
-          <option>Blog Application</option>
-          <option>Job Finder</option>
+          {projects?.map((project) => (
+            <option key={project.id} value={JSON.stringify(project)}>
+              {project.projectName}
+            </option>
+          ))}
         </select>
       </div>
 
