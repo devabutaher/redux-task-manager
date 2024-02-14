@@ -2,7 +2,7 @@ import { formatDate } from "@/utils/formateDate";
 import Image from "next/image";
 
 const Task = ({ data }) => {
-  const [date, month] = formatDate("2024-02-16");
+  const [date, month] = formatDate(data.deadline);
 
   return (
     <>

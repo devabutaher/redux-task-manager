@@ -20,9 +20,14 @@ export const taskApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const response = await queryFulfilled;
-          console.log("response:", response);
-        } catch (error) {
-          console.log(error);
+
+          dispatch(
+            apiSlice.util.updateQueryData("getTasks", undefined, (draft) => {
+              draft.push(response.data);
+            })
+          );
+        } catch (err) {
+          console.error(err.error);
         }
       },
     }),

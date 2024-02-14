@@ -29,7 +29,7 @@ const TaskForm = ({ initialData }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/", { scroll: false });
+      router.push("/");
     }
   }, [isSuccess, router]);
 
@@ -53,7 +53,7 @@ const TaskForm = ({ initialData }) => {
     e.preventDefault();
     createTask(formData);
 
-    // Reset the form after submission
+    // Reset the form
     setFormData({
       taskName: "",
       teamMember: {},
