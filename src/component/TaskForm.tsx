@@ -1,13 +1,17 @@
 "use client";
+
 import { useGetProjectsQuery } from "@/redux/features/projects/projectApi";
 import { useCreateTaskMutation } from "@/redux/features/tasks/taskApi";
 import { useGetTeamsQuery } from "@/redux/features/team/teamApi";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const TaskForm = ({ initialData }) => {
   const { data: projects } = useGetProjectsQuery();
   const { data: teams } = useGetTeamsQuery();
-  const [createTask, { isLoading, isSuccess }] = useCreateTaskMutation();
+  const [createTask, { isLoading, isSuccess, isError }] =
+    useCreateTaskMutation();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     taskName: "",
@@ -22,6 +26,12 @@ const TaskForm = ({ initialData }) => {
       setFormData(initialData);
     }
   }, [initialData]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/", { scroll: false });
+    }
+  }, [isSuccess, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +129,7 @@ const TaskForm = ({ initialData }) => {
       </div>
 
       <div className="text-right">
-        <button type="submit" className="lws-submit">
+        <button type="submit" disabled={isLoading} className="lws-submit">
           Save
         </button>
       </div>

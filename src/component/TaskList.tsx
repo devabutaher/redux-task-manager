@@ -1,7 +1,23 @@
+"use client";
+
+import { useGetTasksQuery } from "@/redux/features/tasks/taskApi";
 import Link from "next/link";
 import Task from "./Task";
 
 const TaskList = () => {
+  const { data: tasks, isError, isLoading } = useGetTasksQuery();
+
+  let content;
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  } else if (!isLoading && isError) {
+    content = <p>Cannot get tasks!</p>;
+  } else if (!isLoading && !isError && tasks?.length === 0) {
+    content = <p>No task found</p>;
+  } else if (!isLoading && !isError && tasks?.length > 0) {
+    content = tasks.map((task) => <Task key={task.id} data={task} />);
+  }
+
   return (
     <div className="lg:pl-[16rem] 2xl:pl-[23rem]">
       <main className="relative z-20 max-w-3xl mx-auto rounded-lg xl:max-w-none">
@@ -26,9 +42,7 @@ const TaskList = () => {
           </Link>
         </div>
 
-        <div className="lws-task-list">
-          <Task />
-        </div>
+        <div className="lws-task-list">{content}</div>
       </main>
     </div>
   );
