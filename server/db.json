@@ -70,11 +70,11 @@
   ],
   "tasks": [
     {
-      "taskName": "Task Two",
+      "taskName": "One Work",
       "teamMember": {
-        "name": "Sumit Saha",
-        "avatar": "/images/avatars/sumit.png",
-        "id": 1
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
       },
       "project": {
         "id": 1,
@@ -83,14 +83,14 @@
       },
       "deadline": "2023-03-15",
       "id": 1,
-      "status": "pending"
+      "status": "complete"
     },
     {
       "taskName": "Task Two",
       "teamMember": {
-        "name": "Akash Ahmed",
-        "avatar": "/images/avatars/akash.png",
-        "id": 3
+        "name": "Sumit Saha",
+        "avatar": "/images/avatars/sumit.png",
+        "id": 1
       },
       "project": {
         "id": 2,
@@ -134,7 +134,7 @@
       "status": "complete"
     },
     {
-      "taskName": "Fix a bug",
+      "taskName": "Fix a error",
       "teamMember": {
         "name": "Md Salahuddin",
         "avatar": "/images/avatars/salahuddin.png",
@@ -230,11 +230,11 @@
       "id": 11
     },
     {
-      "taskName": "Redux Toolkit Video",
+      "taskName": "Redux Toolkit Tutorial ",
       "teamMember": {
-        "name": "Sumit Saha",
-        "avatar": "/images/avatars/sumit.png",
-        "id": 1
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
       },
       "project": {
         "id": 2,

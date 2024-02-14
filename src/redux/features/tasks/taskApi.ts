@@ -1,6 +1,8 @@
 import apiSlice from "@/redux/api/apiSlice";
 
 export const taskApi = apiSlice.injectEndpoints({
+  tagTypes: ["Task"],
+
   endpoints: (builder) => ({
     getTasks: builder.query({
       query: () => "/tasks",
@@ -40,6 +42,8 @@ export const taskApi = apiSlice.injectEndpoints({
         body: data,
       }),
 
+      invalidatesTags: (result, error, { id }) => [{ type: "Task", id }],
+
       async onQueryStarted({ id, data }, { queryFulfilled, dispatch }) {
         // update data optimistically start
         const result = dispatch(
@@ -57,7 +61,6 @@ export const taskApi = apiSlice.injectEndpoints({
 
         try {
           await queryFulfilled;
-          dispatch(apiSlice.util.invalidateTags(["Task", id]));
         } catch (err) {
           result.undo();
           console.error(err);
