@@ -8,6 +8,7 @@ export const taskApi = apiSlice.injectEndpoints({
 
     getTask: builder.query({
       query: (id) => `/tasks/${id}`,
+      providesTags: (result, error, id) => [{ type: "Task", id }],
     }),
 
     createTask: builder.mutation({
@@ -31,8 +32,44 @@ export const taskApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    updateTask: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/tasks/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+
+      async onQueryStarted({ id, data }, { queryFulfilled, dispatch }) {
+        // update data optimistically start
+        const result = dispatch(
+          apiSlice.util.updateQueryData("getTasks", undefined, (draft) => {
+            const existingTaskIndex = draft.findIndex((task) => task.id === id);
+            if (existingTaskIndex !== -1) {
+              draft[existingTaskIndex] = {
+                ...draft[existingTaskIndex],
+                ...data,
+              };
+            }
+          })
+        );
+        // update data optimistically end
+
+        try {
+          await queryFulfilled;
+          dispatch(apiSlice.util.invalidateTags(["Task", id]));
+        } catch (err) {
+          result.undo();
+          console.error(err);
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetTasksQuery, useCreateTaskMutation, useGetTaskQuery } =
-  taskApi;
+export const {
+  useGetTasksQuery,
+  useCreateTaskMutation,
+  useGetTaskQuery,
+  useUpdateTaskMutation,
+} = taskApi;

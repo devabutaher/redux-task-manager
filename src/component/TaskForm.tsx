@@ -1,7 +1,10 @@
 "use client";
 
 import { useGetProjectsQuery } from "@/redux/features/projects/projectApi";
-import { useCreateTaskMutation } from "@/redux/features/tasks/taskApi";
+import {
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
+} from "@/redux/features/tasks/taskApi";
 import { useGetTeamsQuery } from "@/redux/features/team/teamApi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,29 +12,45 @@ import { useEffect, useState } from "react";
 const TaskForm = ({ initialData }) => {
   const { data: projects } = useGetProjectsQuery();
   const { data: teams } = useGetTeamsQuery();
-  const [createTask, { isLoading, isSuccess, isError }] =
-    useCreateTaskMutation();
+  const [
+    createTask,
+    {
+      isLoading: createTaskLoading,
+      isSuccess: createTaskSuccess,
+      isError: createTaskError,
+    },
+  ] = useCreateTaskMutation();
+
+  const [
+    updateTask,
+    {
+      isLoading: updateTaskLoading,
+      isSuccess: updateTaskSuccess,
+      isError: updateTaskError,
+    },
+  ] = useUpdateTaskMutation();
   const router = useRouter();
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const [formData, setFormData] = useState({
     taskName: "",
-    teamMember: { name: "", avatar: "", id: "" },
-    project: { projectName: "", colorClass: "", id: "" },
+    teamMember: {},
+    project: {},
     deadline: "",
-    status: "pending",
   });
 
   useEffect(() => {
     if (initialData) {
+      setIsUpdate(true);
       setFormData(initialData);
     }
   }, [initialData]);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (createTaskSuccess || updateTaskSuccess) {
       router.push("/");
     }
-  }, [isSuccess, router]);
+  }, [createTaskSuccess, updateTaskSuccess, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,15 +70,12 @@ const TaskForm = ({ initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createTask(formData);
 
-    // Reset the form
-    setFormData({
-      taskName: "",
-      teamMember: {},
-      project: {},
-      deadline: "",
-    });
+    if (isUpdate) {
+      updateTask({ id: initialData.id, data: formData });
+    } else {
+      createTask({ ...formData, status: "pending" });
+    }
   };
 
   return (
@@ -129,7 +145,11 @@ const TaskForm = ({ initialData }) => {
       </div>
 
       <div className="text-right">
-        <button type="submit" disabled={isLoading} className="lws-submit">
+        <button
+          type="submit"
+          disabled={createTaskLoading || updateTaskLoading}
+          className="lws-submit"
+        >
           Save
         </button>
       </div>
