@@ -1,7 +1,17 @@
+"use client";
+
+import { searchQuery } from "@/redux/features/tasks/taskSlice";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const handleSearch = (value) => {
+    dispatch(searchQuery(value));
+  };
+
   return (
     <nav className="container relative py-3">
       <div className="flex items-center justify-between">
@@ -29,6 +39,7 @@ const Navbar = () => {
             placeholder="Search Task"
             className="search-input"
             id="lws-searchTask"
+            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
       </div>

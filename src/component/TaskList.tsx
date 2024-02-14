@@ -2,20 +2,39 @@
 
 import { useGetTasksQuery } from "@/redux/features/tasks/taskApi";
 import Link from "next/link";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
 import Task from "./Task";
 
 const TaskList = () => {
-  const { data: tasks, isError, isLoading } = useGetTasksQuery();
+  const { data: tasks = [], isError, isLoading } = useGetTasksQuery();
+  const { searchQuery, projectQuery, teamQuery } = useSelector(
+    (state) => state.tasks
+  );
+
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(
+        (task) =>
+          task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          task.teamMember.name
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          task.project.id === projectQuery ||
+          task.teamMember.id === teamQuery
+      ),
+    [projectQuery, searchQuery, tasks, teamQuery]
+  );
 
   let content;
   if (isLoading) {
     content = <p>Loading...</p>;
   } else if (!isLoading && isError) {
     content = <p>Cannot get tasks!</p>;
-  } else if (!isLoading && !isError && tasks?.length === 0) {
+  } else if (!isLoading && !isError && filteredTasks?.length === 0) {
     content = <p>No task found</p>;
-  } else if (!isLoading && !isError && tasks?.length > 0) {
-    content = tasks.map((task) => <Task key={task.id} data={task} />);
+  } else if (!isLoading && !isError && filteredTasks?.length > 0) {
+    content = filteredTasks.map((task) => <Task key={task.id} data={task} />);
   }
 
   return (
