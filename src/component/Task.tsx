@@ -1,9 +1,41 @@
+import { useUpdateTaskMutation } from "@/redux/features/tasks/taskApi";
 import { formatDate } from "@/utils/formateDate";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Task = ({ data }) => {
   const [date, month] = formatDate(data.deadline);
+  const [updateTask, { isLoading, isError, isSuccess }] =
+    useUpdateTaskMutation();
+
+  const [status, setStatus] = useState(data.status);
+
+  const [timer, setTimer] = useState(null);
+
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    setTimer(
+      setTimeout(() => {
+        updateTask({ id: data.id, data: { status: newStatus } });
+        setTimer(null);
+      }, 2000)
+    );
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [timer]);
 
   return (
     <>
@@ -66,12 +98,16 @@ const Task = ({ data }) => {
               </svg>
             </Link>
           )}
-          <select className="lws-status">
-            <option value="pending" selected>
+          <select className="lws-status" onChange={handleStatusChange}>
+            <option value="pending" selected={data.status === "pending"}>
               Pending
             </option>
-            <option value="inProgress">In Progress</option>
-            <option value="complete">Completed</option>
+            <option value="inProgress" selected={data.status === "inProgress"}>
+              In Progress
+            </option>
+            <option value="complete" selected={data.status === "complete"}>
+              Completed
+            </option>
           </select>
         </div>
       </div>
