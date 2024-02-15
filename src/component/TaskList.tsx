@@ -8,22 +8,16 @@ import Task from "./Task";
 
 const TaskList = () => {
   const { data: tasks = [], isError, isLoading } = useGetTasksQuery();
-  const { searchQuery, projectQuery, teamQuery } = useSelector(
-    (state) => state.tasks
-  );
+  const { searchQuery } = useSelector((state) => state.tasks);
 
   const filteredTasks = useMemo(
     () =>
       tasks.filter(
         (task) =>
           task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          task.teamMember.name
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          task.project.id === projectQuery ||
-          task.teamMember.id === teamQuery
+          task.teamMember.name.toLowerCase().includes(searchQuery.toLowerCase())
       ),
-    [projectQuery, searchQuery, tasks, teamQuery]
+    [searchQuery, tasks]
   );
 
   let content;

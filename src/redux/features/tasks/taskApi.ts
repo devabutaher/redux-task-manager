@@ -1,8 +1,6 @@
 import apiSlice from "@/redux/api/apiSlice";
 
 export const taskApi = apiSlice.injectEndpoints({
-  tagTypes: ["Task"],
-
   endpoints: (builder) => ({
     getTasks: builder.query({
       query: () => "/tasks",
@@ -67,6 +65,29 @@ export const taskApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    deleteTask: builder.mutation({
+      query: (id) => ({
+        url: `/tasks/${id}`,
+        method: "DELETE",
+      }),
+
+      async onQueryStarted(id, { queryFulfilled, dispatch }) {
+        // delete data optimistically start
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData("getTasks", undefined, (draft) => {
+            return draft.filter((task) => task.id !== id);
+          })
+        );
+        // delete data optimistically end
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          patchResult.undo();
+          console.error(err);
+        }
+      },
+    }),
   }),
 });
 
@@ -75,4 +96,5 @@ export const {
   useCreateTaskMutation,
   useGetTaskQuery,
   useUpdateTaskMutation,
+  useDeleteTaskMutation,
 } = taskApi;

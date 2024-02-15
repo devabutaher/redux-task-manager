@@ -1,4 +1,7 @@
-import { useUpdateTaskMutation } from "@/redux/features/tasks/taskApi";
+import {
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "@/redux/features/tasks/taskApi";
 import { formatDate } from "@/utils/formateDate";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,9 +11,10 @@ const Task = ({ data }) => {
   const [date, month] = formatDate(data.deadline);
   const [updateTask, { isLoading, isError, isSuccess }] =
     useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
 
+  // update state functionality start
   const [status, setStatus] = useState(data.status);
-
   const [timer, setTimer] = useState(null);
 
   const handleStatusChange = (e) => {
@@ -25,7 +29,7 @@ const Task = ({ data }) => {
       setTimeout(() => {
         updateTask({ id: data.id, data: { status: newStatus } });
         setTimer(null);
-      }, 2000)
+      }, 1000)
     );
   };
 
@@ -36,6 +40,12 @@ const Task = ({ data }) => {
       }
     };
   }, [timer]);
+  // update state functionality start
+
+  // delete task
+  const handleDelete = (id) => {
+    deleteTask(id);
+  };
 
   return (
     <>
@@ -64,8 +74,11 @@ const Task = ({ data }) => {
             <p className="lws-task-assignedOn">{data.teamMember.name}</p>
           </div>
           {/* <!-- delete button will not shown to the ui, until the status of the task will be completed --> */}
-          {data.status === "completed" ? (
-            <button className="lws-delete">
+          {data.status === "complete" ? (
+            <button
+              className="lws-delete"
+              onClick={() => handleDelete(data.id)}
+            >
               <svg
                 fill="none"
                 viewBox="0 0 24 24"
