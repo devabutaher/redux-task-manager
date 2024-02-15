@@ -1,6 +1,6 @@
 "use client";
 
-import { teamQuery } from "@/redux/features/tasks/taskSlice";
+import { searchQuery } from "@/redux/features/tasks/taskSlice";
 import { useGetTeamsQuery } from "@/redux/features/team/teamApi";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ const TeamMembers = () => {
   const dispatch = useDispatch();
 
   const handleChange = (value) => {
-    dispatch(teamQuery(value));
+    dispatch(searchQuery(value));
   };
 
   let content;
@@ -23,7 +23,7 @@ const TeamMembers = () => {
   } else if (!isLoading && !isError && teams?.length > 0) {
     content = teams.map((team) => (
       <div
-        onChange={() => handleChange(team.id)}
+        onClick={() => handleChange(team.name)}
         key={team.id}
         className="checkbox-container"
       >

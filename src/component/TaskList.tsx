@@ -15,7 +15,12 @@ const TaskList = () => {
       tasks.filter(
         (task) =>
           task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          task.teamMember.name.toLowerCase().includes(searchQuery.toLowerCase())
+          task.teamMember.name
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          !task.project.projectName
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
       ),
     [searchQuery, tasks]
   );

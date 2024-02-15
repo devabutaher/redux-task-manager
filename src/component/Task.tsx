@@ -58,7 +58,7 @@ const Task = ({ data }) => {
         <div className="lws-taskContainer">
           <h1 className="lws-task-title">{data.taskName}</h1>
           <span className={`lws-task-badge ${data.project.colorClass}`}>
-            {data.project.colorClass}
+            {data.project.projectName}
           </span>
         </div>
 

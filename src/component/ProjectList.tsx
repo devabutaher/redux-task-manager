@@ -1,9 +1,20 @@
 "use client";
 
 import { useGetProjectsQuery } from "@/redux/features/projects/projectApi";
+import { searchQuery } from "@/redux/features/tasks/taskSlice";
+import { useDispatch } from "react-redux";
 
 const ProjectList = () => {
   const { data: projects = [], isLoading, isError } = useGetProjectsQuery();
+  const dispatch = useDispatch();
+
+  const handleChange = (value, checked) => {
+    if (checked === false) {
+      dispatch(searchQuery(value));
+    } else {
+      dispatch(searchQuery(""));
+    }
+  };
 
   let content;
   if (isLoading) {
@@ -14,7 +25,11 @@ const ProjectList = () => {
     content = <p>No project found</p>;
   } else if (!isLoading && !isError && projects?.length > 0) {
     content = projects.map((project) => (
-      <div key={project.id} className="checkbox-container">
+      <div
+        key={project.id}
+        className="checkbox-container"
+        onClick={(e) => handleChange(project.projectName, e.target.checked)}
+      >
         <input
           type="checkbox"
           id={`project-${project.id}`}
