@@ -1,5 +1,5 @@
 
-# Reduxt Task
+# Redux Task Manager
 
 Reduct Task Manager makes managing task more easier. Users can add, edit, and delete task listings effortlessly. Quickly sort and search through task to find the perfect match.
 
